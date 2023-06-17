@@ -4,7 +4,7 @@
 
   To use the Tool, cd into /source and type: <br>
 
-  <h5>sudo ./wci -i [network card],      for Example:       sudo ./wci -i wlan1</h5>
+  <h5>sudo ./fwi -i [network card],      for Example:       sudo ./fwi -i wlan1</h5>
 
   <br>You can develop your own phishing Page and place it in the templates folder.
   
