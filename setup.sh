@@ -21,6 +21,6 @@ pip install click
 
 clear
 
-echo Done! Now you just can cd into 'source' and type 'wci -h' to get started!
+echo Done! Now you just can cd into 'source' and type 'fwt -h' to get started!
 
 
