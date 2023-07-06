@@ -1,0 +1,128 @@
+#!/usr/bin/python3
+
+#FakeWifiTool
+#uses macchanger
+
+
+import os 
+import click
+import subprocess as sp
+
+
+
+
+#Tool Class
+class tool:
+    def printBanner(self,interface,macCardColor,permanentMacAdress,currentMacAdress):
+        self.banner1 = f"""    ______ _    _ _____ 
+    |  ___| |  | |_   _|
+    | |_  | |  | | | |  
+    |  _| | |/\| | | |  
+    | |   \  /\  / | |  
+    \_|    \/  \/  \_/ 
+    Using Fake Wifi Tool: V0.0.1
+    by theCodemander
+    
+    
+  \33[37m  Current Wifi Card: {interface}
+  \33[37m  Current Mac: \33[{self.macCardColor}m {self.currentMacAdress}
+  \33[37m  Permanent Mac: {self.permanentMacAdress}
+    
+    
+    
+    
+    """
+
+        print(self.banner1)
+    def __init__(self,interface):
+        self.interface  = interface
+        self.currentMacAdress = ""
+        self.permanentMacAdress = ""
+
+        self.ismonitorMode = "No"
+        self.monitorModeColor = "31"
+        self.macCardColor = "31"
+        self.wlanMode = ""
+        self.output = ""
+
+        #Detect the Macadress from the current Networking Card
+        temp = sp.run(["macchanger","-s", f"{self.interface}"],stdout=sp.PIPE)
+        self.currentMacAdress = str(temp.stdout.decode().split("\n"))
+        self.permanentMacAdress = self.currentMacAdress.split()[0]
+        self.currentMacAdress = self.currentMacAdress.split()[2]
+
+
+        self.printBanner(self.interface,self.macCardColor,self.permanentMacAdress,self.currentMacAdress)
+        while True:
+            # Detect if the Networking Card is in Monitor mode
+            temp = sp.run(["iwconfig",self.interface],stdout=sp.PIPE)
+            temp = temp.stdout.decode().split("\n")
+            if("Managed" in temp[1]):
+                self.ismonitorMode = "No"
+                self.monitorModeColor = "31"
+            if("Monitor" in temp[1]):
+                self.ismonitorMode = "Yes"
+                self.monitorModeColor = "32"
+
+            
+            try:
+                self.checkMacAdress()
+                os.system("clear")
+                self.printBanner(self.interface,self.macCardColor,self.permanentMacAdress,self.currentMacAdress)                        
+                print(self.output)
+                command  = input(">> ")
+                self.output = ""
+                match (command):
+                    case "exit":
+                        exit()
+                    case "help":
+
+                        self.output = "help, clear, changeMac, revertMac"
+                    case "clear":
+                        os.system("clear")
+                    case "changeMac":
+                        self.output = self.changeMacAdress(self.interface)
+                        self.macCardColor = "32"
+                    case "revertMac":
+                        self.output = self.revertMacAdress(self.interface)
+                        self.permanentMacAdress = self.currentMacAdress.split()[0]
+                    case _:
+                        self.output = "\nPlease use a existing Command"
+            except KeyboardInterrupt:
+                print("\nPlease type the 'exit' command to exit the program.")
+
+    def checkMacAdress(self):
+        #Detect the Macadress from the current Networking Card
+        temp = sp.run(["macchanger","-s", f"{self.interface}"],stdout=sp.PIPE)
+        self.currentMacAdress = str(temp.stdout.decode().split("\n"))
+        self.permanentMacAdress = self.currentMacAdress.split()[6]
+        self.currentMacAdress = self.currentMacAdress.split()[2]
+    def changeMacAdress(self,interface):
+        sp.run(["ifconfig",f"{interface}","down"])
+        s = sp.run(["macchanger","-r", f"{interface}"], shell=False, stdout=sp.PIPE, stderr=sp.STDOUT)
+        sp.run(["ifconfig",f"{interface}","up"])
+        macOutput = s.stdout.decode().split("\n")
+        output = str(macOutput[0])+"\n"+str(macOutput[6])+"\n"+str(macOutput[2])+"\n"
+        return output
+    def revertMacAdress(self,interface):
+        sp.run(["ifconfig",f"{interface}","down"])
+        s = sp.run(["macchanger", "-p", f"{interface}"], shell=False, stdout=sp.PIPE, stderr=sp.STDOUT)
+        sp.run(["ifconfig",f"{interface}","up"])
+        macOutput = s.stdout.decode().split("\n")
+        output = str(macOutput[0])+"\n"+str(macOutput[1])+"\n"+str(macOutput[2])+"\n"
+        return output
+
+
+@click.command()
+@click.option("--interface","-i",type=str,help="Wlan card used with the tool(monitor mode option is required!)")
+#Starting Program
+def start(interface):
+    try:
+        if not os.environ.get("SUDO_UID"):
+            click.echo("You need to run this command as \33[31mroot\33[37m!")
+            quit()
+        else:
+            interface = tool(interface) 
+    except IndexError:
+        click.echo("ERROR: Check that the selected card exists.")
+start()
