@@ -1,26 +1,21 @@
 #!/bin/bash
 
-mkdir /opt/wci \
-	  /opt/wci/main  \
-	  /opt/wci/cache  \
-	  /opt/wci/main/captures \ 
-	  /opt/wci/main/captures/handshake/ \
-	  /srv/http/wciPage 2>/dev/null
+
+#https://stackoverflow.com/     questions/6967331/how-do-i-install-a-script-to-run-anywhere-from-the-command-line
+
+mkdir /opt/fwt \
+        /opt/fwt/main \
+        /opt/fwt/files \
+        /opt/fwt/main/captures \
+        /srv/http/fwtPage
+
+#cp ./scripts/fwt-1.1.5 /usr/local/bin
 
 
-rm /etc/httpd/conf/httpd.conf
-rm /etc/httpd/conf/extra/httpd-vhosts.conf
-cp ./source/confFiles/httpd.conf /etc/httpd/conf/
-cp ./source/confFiles/httpd-vhosts.conf /etc/httpd/conf/extra
-cp -r ./source  /opt/wci/main
-cp -r ./source/confFiles/templates  /opt/wci/main/source
+pacman -S xterm aircrack-ng hostapd apache dnsmasq wireshark-cli wireshark-qt python python-pip --noconfirm 
+pacman -S python-click  --noconfirm
 
+usr=$(whoami)
+export PATH=$PATH:/usr/$usr/bin
 
-pacman -S xterm aircrack-ng hostapd apache python python-pip dnsmasq wireshark-cli wireshark-qt --noconfirm #&>/dev/null
-pip install click
-
-clear
-
-echo Done! Now you just can cd into 'source' and type 'fwt -h' to get started!
-
-
+echo -e "\033[32m Done!\033[37m - Now you can just type \033[31m sudo fwt -h \033[37m in the terminal to start the tool!"
