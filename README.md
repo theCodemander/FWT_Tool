@@ -4,7 +4,7 @@
 
   To use the Tool, cd into /source and type:
   
-  <code>sudo ./fwi -i [network card]</code>
+  <code>sudo ./fwt -i [network card]</code>
   
   You can develop your own phishing Page and place it in the templates folder.<br>
   This tool was developed only for Arch Linux.
