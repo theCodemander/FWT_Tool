@@ -7,7 +7,7 @@
   <code>sudo ./fwi -i [network card]</code>
   
   You can develop your own phishing Page and place it in the templates folder.<br>
-  This tool was developed for Arch Linux im not planing to make it available for other distros.
+  This tool was developed only for Arch Linux.
 
 </body>
 
