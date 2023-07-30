@@ -1,6 +1,6 @@
 <html>
 <body>
-  <h1>FWI (Fake Wifi Interface)</h1> 
+  <h1>FWT (Fake Wifi Tool)</h1> 
 
   To use the Tool, cd into /source and type:
   
