@@ -3,8 +3,6 @@ Librerias de Python:
 - click
 - subprocess
 - time
-- shutil
-
 
 Programas externos:
 - xterm
@@ -13,6 +11,8 @@ Programas externos:
 - hostapd
 - wireshark-cli
 - macchanger
+- dnsmasq
+- lighttpd
 
 Lenguajes de programación:
 - python
