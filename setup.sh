@@ -10,8 +10,10 @@ mkdir /opt/fwt \
         /opt/fwt/main/captures \
         /srv/http/fwtPage
 
-#cp ./scripts/fwt-1.1.8 /usr/local/bin
-#cp -r ./scripts/templates /opt/fwt/main/
+cp ./scripts/fwt-1.1.9 /usr/local/bin
+chmod +x /usr/local/bin/fwt-1.1.9
+
+cp -r ./scripts/templates /opt/fwt/main/
 
 pacman -S xterm aircrack-ng hostapd apache lighttpd iw dnsmasq wireshark-cli wireshark-qt python python-pip --noconfirm 
 pacman -S python-click --noconfirm
