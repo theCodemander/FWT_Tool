@@ -165,8 +165,8 @@ class tool:
             self.cardMode = "No"
             self.monitorModeColor = "31"
         if("Master" in str(temp)):
-            self.cardMode = "No"
-            self.monitorModeColor = "31" 
+            self.cardMode = "Yes"
+            self.monitorModeColor = "32" 
         if("Monitor" in str(temp)):
             self.cardMode = "Yes"
             self.monitorModeColor = "32"
