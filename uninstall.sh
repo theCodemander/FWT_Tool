@@ -8,6 +8,7 @@ fi
 if [ -f "/usr/local/bin/fwt" ]
 then
     rm /usr/local/bin/fwt -f
+    rm /opt/fwt --recursive -f
     echo -e "FWT has been uninstalled from your system."
 else
     echo -e "FWT is not present in your system."
