@@ -10,7 +10,7 @@
   
   You can develop your own phishing Page and place it in the templates folder.<br>
   <code>/opt/fwt/main/templates/template_folder</code>
-  This tool was developed only for Arch Linux.
+  <br>This tool was developed only for Arch Linux.
 
 </body>
 
