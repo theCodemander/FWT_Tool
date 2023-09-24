@@ -9,8 +9,8 @@
   <code>sudo fwt -i [network card]</code>
   
   You can develop your own phishing Page and place it in the templates folder.<br>
-  <code>/opt/fwt/main/templates/template_folder</code>
-  <br>This tool was developed only for Arch Linux.
+  <code>/opt/fwt/main/templates/template_folder</code><br>
+  This tool was developed only for Arch Linux.
 
 </body>
 
