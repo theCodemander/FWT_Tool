@@ -210,6 +210,7 @@ dhcp-option=6,192.168.1.1
 address=/#/192.168.1.1''')
 
     # Create lighttpd config file
+    # https://en.wikipedia.org/wiki/Captive_portal
     def writeLighttpdConf(self, templatePath):
         f = open("/opt/fwt/main/cache/lighttpd.conf","w")
         f.write("server.document-root = \"" + templatePath + '''\"
