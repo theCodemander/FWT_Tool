@@ -230,22 +230,22 @@ url.redirect = ( "^/index.htm$" => "/")
 url.redirect-code = 302
 }
 
-$HTTP["host"] =~ "gstatic.com" {
+$HTTP["host"] =~ "gstatic.com\" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.google.com/")
 url.redirect-code = 302
 }
 
-$HTTP["host"] =~ "captive.apple.com" {
+$HTTP["host"] =~ "captive.apple.com\" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.apple.com/")
 url.redirect-code = 302
 }
 
-$HTTP["host"] =~ "msftconnecttest.com" {
+$HTTP["host"] =~ "msftconnecttest.com\" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.microsoft.com/")
 url.redirect-code = 302
 }
 
-$HTTP["host"] =~ "msftncsi.com" {
+$HTTP["host"] =~ "msftncsi.com\" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.microsoft.com/")
 url.redirect-code = 302
 }
