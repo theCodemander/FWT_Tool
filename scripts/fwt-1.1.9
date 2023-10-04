@@ -211,6 +211,11 @@ address=/#/192.168.1.1''')
 
     # Create lighttpd config file
     # https://en.wikipedia.org/wiki/Captive_portal
+
+    #connectivitycheck.gstatic.com and clients3.google.com - android
+    #captive.apple.com and apple.com - iphone
+    #msftncsi.com and msftconnecttest.com - windows
+    
     def writeLighttpdConf(self, templatePath):
         f = open("/opt/fwt/main/cache/lighttpd.conf","w")
         f.write("server.document-root = \"" + templatePath + '''\"
