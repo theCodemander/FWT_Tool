@@ -1,7 +1,4 @@
 #!/bin/bash
-
-#https://stackoverflow.com/questions/6967331/how-do-i-install-a-script-to-run-anywhere-from-the-command-line
-
 mkdir /opt/fwt \
         /opt/fwt/main \
         /opt/fwt/main/cache \
