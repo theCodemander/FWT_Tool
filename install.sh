@@ -15,4 +15,4 @@ cp -r ./scripts/templates /opt/fwt/main/
 pacman -S xterm aircrack-ng hostapd apache lighttpd iw dnsmasq wireshark-cli wireshark-qt python python-pip --noconfirm 
 pacman -S python-click --noconfirm
 
-echo -e "\033[32m Done!\033[37m - Now you can just type \033[31m sudo fwt --help \033[37m in the terminal to start the tool!"
+echo -e "\033[32m Done!\033[37m - Now you can just type \033[31m sudo fwt --help \033[37m in the terminal to see how to start the tool!"
