@@ -12,6 +12,10 @@
   <code>/opt/fwt/main/templates/template_folder</code><br>
   This tool was developed only for Arch Linux.
 
+ <img src="./repo_resources/fwt_screenshot_1.png" alt="fwt main screenshot" width=70% height=70% > 
+ <img src="./repo_resources/fwt_screenshot_2.png" alt="fwt main screenshot" width=70% height=70% > 
+
+
 </body>
 
 </html>
