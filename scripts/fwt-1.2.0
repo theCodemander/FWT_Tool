@@ -247,7 +247,7 @@ url.redirect-code = 302
 }
 
 $HTTP["host"] =~ "gstatic.com" {
-url.redirect = ( "^/(.*)$" => "http://connectivitycheck.google.com/")
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.gstatic.com/")
 url.redirect-code = 302
 }
 
@@ -268,7 +268,10 @@ url.redirect-code = 302
 
 server.port = 80
 
-index-file.names = ( "index.php", "index.html", "index.htm" )
+index-file.names = ( 
+"index.php",
+"index.html",
+"index.htm" )
 server.error-handler-404 = "/"
 
 mimetype.assign = (
@@ -276,7 +279,12 @@ mimetype.assign = (
 ".js" => "text/javascript"
 )
 
-cgi.assign = ( ".htm" => "/bin/bash" )
+cgi.assign = ( 
+".htm" => "/bin/bash",
+".html" => "/bin/bash"
+)
+
+
 ''')
 
 #PART 5 - THE CAPTIVE PORTAL FUNCITION, HOW IT WORKS AND WHAT EVERY COMMAND DOES
