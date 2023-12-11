@@ -251,7 +251,17 @@ url.redirect = ( "^/(.*)$" => "http://connectivitycheck.gstatic.com/")
 url.redirect-code = 302
 }
 
+$HTTP["host"] =~ "clients3.google.com" {
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.google.com/")
+url.redirect-code = 302
+}
+
 $HTTP["host"] =~ "captive.apple.com" {
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.apple.com/")
+url.redirect-code = 302
+}
+
+$HTTP["host"] =~ "apple.com" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.apple.com/")
 url.redirect-code = 302
 }
@@ -263,6 +273,11 @@ url.redirect-code = 302
 
 $HTTP["host"] =~ "msftncsi.com" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.microsoft.com/")
+url.redirect-code = 302
+}
+
+$HTTP["host"] =~ "nmcheck.gnome.org" {
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.gnome.com/")
 url.redirect-code = 302
 }
 
@@ -280,12 +295,12 @@ mimetype.assign = (
 )
 
 cgi.assign = ( 
-".htm" => "/bin/bash",
-".html" => "/bin/bash"
-)
+".htm" => "/bin/bash")
 
 
 ''')
+
+#https://en.wikipedia.org/wiki/Captive_portal
 
 #PART 5 - THE CAPTIVE PORTAL FUNCITION, HOW IT WORKS AND WHAT EVERY COMMAND DOES
 
