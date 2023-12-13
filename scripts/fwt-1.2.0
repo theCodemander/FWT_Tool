@@ -203,9 +203,6 @@ class tool:
 # PART 4 - DEFINE THE CONFIG FILES FOR HOSTAPD, DNSMASQ AND LIGHTTPD
 
 
-
-
-
     # Create hostapd config file
     def writeHostapdConf(self,card,ssid,channel,hw_mode):
         f = open("/opt/fwt/main/cache/hostapd.conf", "w")
@@ -251,17 +248,27 @@ url.redirect = ( "^/(.*)$" => "http://connectivitycheck.gstatic.com/")
 url.redirect-code = 302
 }
 
-$HTTP["host"] =~ "clients3.google.com" {
-url.redirect = ( "^/(.*)$" => "http://connectivitycheck.google.com/")
+$HTTP["host"] =~ "android.com"{
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
+url.redirect-code = 302
+}
+
+$HTTP["host"] =~ "clients1.google.com"{
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
+url.redirect-code = 302
+}
+
+$HTTP["host"] =~ "clients3.google.com"{
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
+url.redirect-code = 302
+}
+
+$HTTP["host"] =~ "android.clients.google.com"{
+url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
 url.redirect-code = 302
 }
 
 $HTTP["host"] =~ "captive.apple.com" {
-url.redirect = ( "^/(.*)$" => "http://connectivitycheck.apple.com/")
-url.redirect-code = 302
-}
-
-$HTTP["host"] =~ "apple.com" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.apple.com/")
 url.redirect-code = 302
 }
@@ -273,11 +280,6 @@ url.redirect-code = 302
 
 $HTTP["host"] =~ "msftncsi.com" {
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.microsoft.com/")
-url.redirect-code = 302
-}
-
-$HTTP["host"] =~ "nmcheck.gnome.org" {
-url.redirect = ( "^/(.*)$" => "http://connectivitycheck.gnome.com/")
 url.redirect-code = 302
 }
 
@@ -302,6 +304,8 @@ cgi.assign = (
 ''')
 
 #https://en.wikipedia.org/wiki/Captive_portal
+#https://support.google.com/work/android/answer/10513641?hl=en
+#https://stackoverflow.com/questions/34933146/prevent-captive-portal-auto-close-after-authentication-android
 
 #PART 5 - THE CAPTIVE PORTAL FUNCITION, HOW IT WORKS AND WHAT EVERY COMMAND DOES
 
