@@ -253,16 +253,6 @@ url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
 url.redirect-code = 302
 }
 
-$HTTP["host"] =~ "clients1.google.com"{
-url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
-url.redirect-code = 302
-}
-
-$HTTP["host"] =~ "clients3.google.com"{
-url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
-url.redirect-code = 302
-}
-
 $HTTP["host"] =~ "android.clients.google.com"{
 url.redirect = ( "^/(.*)$" => "http://connectivitycheck.android.com/")
 url.redirect-code = 302
