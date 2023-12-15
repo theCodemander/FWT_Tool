@@ -303,6 +303,8 @@ cgi.assign = (
 
 ''')
 
+
+#https://community.e.foundation/t/how-about-captive-portal-check/24953/2
 #https://en.wikipedia.org/wiki/Captive_portal
 #https://support.google.com/work/android/answer/10513641?hl=en
 #https://stackoverflow.com/questions/34933146/prevent-captive-portal-auto-close-after-authentication-android
