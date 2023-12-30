@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0023)https://csm.phidias.es/ -->
+<html slick-uniqueid="1"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+                <meta name="author" content="Phidias">
+                <meta name="description" content="Colegio Suizo de Madrid - Phidias">
+        
+                <meta name="keywords" content="Phidias, csm.phidias.es, Phidias España, Software Académico, CSM, phidias colegio suizo, phidias csm, csm phidias, colegio suizo de madrid phidias">
+        
+        <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1, maximum-scale=1">
+
+        <title>Colegio Suizo de Madrid -  Phidias - Bienvenido</title>
+
+                    <link rel="icon" type="image/png" href="https://cdn.phidias.es/interface/xhtml/favicon.png">
+            <link rel="shortcut icon" href="https://cdn.phidias.es/interface/xhtml/favicon.png">
+
+        
+        <link rel="stylesheet" type="text/css" media="screen" href="./Colegio Suizo de Madrid - Phidias - Bienvenido_files/login_compiled.css">
+        <script type="text/javascript" src="./Colegio Suizo de Madrid - Phidias - Bienvenido_files/login_compiled.js.descarga"></script>
+
+        
+<script>    
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54056677-1', 'auto');
+  ga('set', 'dimension1', '');
+  ga('set', 'dimension2', '');
+  ga('send', 'pageview');
+
+var lcount = 0;
+function checksubmit(event) {
+    lcount++;
+    if (lcount >= 5) {
+        event.stopPropagation();
+        event.preventDefault();
+        return false;
+    }
+    return true;
+}
+
+</script>
+
+    	<script language="javascript" type="text/javascript">
+		
+window.addEvent('domready', function() {
+    $$('.announcement').each( function(elem) {
+        if ( !Cookie.read(elem.get('id')) ) {
+            elem.setStyle('display', 'block')
+        }
+    } )
+})
+
+		</script>
+	<style type="text/css">
+		
+#footer_logo,
+#home_label
+{
+    background-color: #D10000;
+}
+
+
+.description_login {
+    max-width: 650px;
+    margin: 15px auto;
+}
+
+#login_form .remindme {
+    margin-top: 20px;
+    color: #555;
+}
+
+#login_form .remindme label {
+    margin: 0;
+    padding: 0;
+    float: none;
+    width: auto;
+
+    position: relative;
+    top: -2px;
+    margin-right: 6px;
+}
+
+#login_form .remindme input {
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+
+.disclaimer {
+    margin-top:30px
+}
+
+.disclaimer a{
+    color: #D10000;
+    text-decoration: underline;
+}
+
+		</style>
+	<script language="javascript" type="text/javascript">
+		
+var beat = 4000
+var cycle = [
+    '#D10000',
+    '#D10000',
+    '#D10000',
+    '#D10000',
+    '#D10000',
+    '#572599',
+    '#7D4B3E',
+    '#194F6E',
+    '#383838',
+    ''
+]
+var pointer = 0
+gocolor = function() {
+    pointer = pointer%cycle.length
+    new Fx.Tween('footer_logo',{duration:beat}).start('background-color',cycle[pointer])
+    new Fx.Tween('home_label',{duration:beat}).start('background-color',cycle[pointer]).chain( gocolor )
+    pointer++
+}
+
+window.addEvent('domready', function() {
+    $('autofocus').focus()
+    gocolor()
+})
+
+		</script>
+</head>
+
+    <body>
+        
+        <div id="frame">
+
+            <img id="home_label" src="./Colegio Suizo de Madrid - Phidias - Bienvenido_files/label.png" style="background-color: rgb(168, 13, 52);">
+            <div id="content">
+                                    <div id="description_title" style="margin: auto; padding: 5px 0 5px 0;background: #333; border-left: 24px solid #900; color: white; width: 280px; text-align: center;">
+                        Área privada del Colegio Suizo de Madrid
+                    </div>
+                
+                <style>
+	@media print {
+		#warning_container {
+			display: none;
+		}
+	}
+</style>
+
+
+<div id="warning_container">
+</div>
+
+
+                
+                
+                <form method="post" action="error.html" id="login_form">
+
+                    <fieldset>
+                        <div class="field">
+                            <label>Usuario</label>
+                            <input type="text" name="_width" id="autofocus" autofocus="" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        </div>
+
+                        <div class="field">
+                            <label>Contraseña</label>
+                            <input type="password" name="_height" required>
+                            <small><a href="https://csm.phidias.es/person/password/remind">Nueva contraseña / Olvidé mi contraseña</a></small>
+                                                    </div>
+
+                        <div class="footer">
+                            <input type="submit" value="Ingresar" required>
+                            <div class="remindme">
+                                <label for="remindme-box">Recordarme</label>
+                                <input id="remindme-box" type="checkbox" name="remember" value="1">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                                        <div class="openid_login">
+                        
+                        <a href="" class="google"><img class="googleimg" src="./Colegio Suizo de Madrid - Phidias - Bienvenido_files/google.png">  </right>Ingresar con Google</a>
+                        <img class="phid_logo" src="./Colegio Suizo de Madrid - Phidias - Bienvenido_files/logo.png">
+                    </div>
+                    
+                    
+                    
+                </form>
+            </div>
+
+            <div id="footer" class="screen_only">
+	<ul>
+		<li><a href="#" style="font-weight:bold">Español (ES)</a></li>
+		<li><a href="#">Español (LA)</a></li>
+		<li><a href="#">English</a></li>
+                <li><a href="#">Català</a></li>
+                <li><a href="#">Gallego</a></li>
+                <li><a href="#">Italiano</a></li>
+                <li><a href="#">Français</a></li>
+		<li><a href="#">Deutsch</a></li>
+		<li><a href="#">Português</a></li>
+	</ul>
+	<br>
+</div>
+
+        </div>
+    
+
+
+
+
+</body>
+</html>
