@@ -16,6 +16,8 @@
  <img src="./repo_resources/fwt_screenshot_2.png" alt="fwt main screenshot" width=70% height=70% > 
 
 
+Usage of FWT for attacking targets without prior mutual consent is illegal. It's the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program.
+
 </body>
 
 </html>
